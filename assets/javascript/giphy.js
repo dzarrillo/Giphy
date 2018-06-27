@@ -29,7 +29,7 @@ $(document).ready(function () {
     function getAPICall(tag) {
 
         var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=DQXjbpP0PoMNMzpNI8TQKjHnwuuAgBbk&tag&rating=g&tag=technology";
-        var queryUrl = "http://api.giphy.com/v1/gifs/search?q=" + tag + "&api_key=DQXjbpP0PoMNMzpNI8TQKjHnwuuAgBbk&tag&limit=10";
+        var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + tag + "&api_key=DQXjbpP0PoMNMzpNI8TQKjHnwuuAgBbk&tag&limit=10";
 
         $.ajax({ url: queryUrl, method: "GET" })
             .done(function (response) {
