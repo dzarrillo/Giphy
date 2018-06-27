@@ -1,34 +1,14 @@
 $(document).ready(function () {
 
-    var arrTopics = ["Technology", "Food", "Sports"];
+    var arrTopics = ["TECHNOLOGY", "FOOD", "SPORTS"];
+
     var stillPic;
     var movPic;
 
-
     createTopicButtons();
-
-    // for (var i = 0; i < arrTopics.length; i++) {
-    //     // $( "p" ).addClass( "myClass yourClass" );
-    //     // $(this).attr("id", "link" + n);
-    //     // var dogImage = $("<img>");
-    //     var btnTopic = $("<button></button>");
-    //     btnTopic.attr("id", arrTopics[i]);
-    //     btnTopic.attr("class", "mybuttons btn btn-outline-success");
-    //     // btnTopic.attr("input", arrTopics[i]);
-    //     btnTopic.text(arrTopics[i]);
-    //     console.log("button " + arrTopics[i]);
-    //     $("#mytopics").append(btnTopic);
-    // }
-
-    $("button").on("click", function () {
-
-        console.log("Clicked!" + $(this).text());
-        getAPICall($(this).text());
-    });
 
     function getAPICall(tag) {
 
-        var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=DQXjbpP0PoMNMzpNI8TQKjHnwuuAgBbk&tag&rating=g&tag=technology";
         var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + tag + "&api_key=DQXjbpP0PoMNMzpNI8TQKjHnwuuAgBbk&tag&limit=10";
 
         $.ajax({ url: queryUrl, method: "GET" })
@@ -43,7 +23,8 @@ $(document).ready(function () {
                     var picDiv = $("<div>");
                     var picImage = $("<img>");
                     picImage.addClass("picImage");
-                    var p = $("<p>").text("Rating: " + response.data[j].rating);
+                    var myRate = response.data[j].rating;
+                    var p = $("<p>").text("Rating: " + myRate.toUpperCase());
                     p.addClass("rating");
 
                     stillPic = response.data[j].images.fixed_height_still.url;
@@ -60,7 +41,7 @@ $(document).ready(function () {
 
     $("body").on("click", "img", function () {
         // console.log("Image clicked" + $(this).attr("class"));
-        // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+
         var state = $(this).attr("data-state");
         // If the clicked image's state is still, update its src attribute to what its data-animate value is.
         // Then, set the image's data-state to animate
@@ -75,30 +56,38 @@ $(document).ready(function () {
 
     });
 
+
     $("#add-topic").on("click", function (event) {
         // Prevent form from submitting
         event.preventDefault();
         var topic = $("#topic-input").val().trim();
-        console.log("On submit " + topic);
-        
-        var btnTopic = $("<button></button>");
-            btnTopic.attr("id", topic);
-            btnTopic.attr("class", "mybuttons btn btn-outline-success topic-buttons");
-            // btnTopic.attr("input", arrTopics[i]);
-            btnTopic.text(topic);
-            console.log("button topic" + topic);
-            $("#mytopics").append(btnTopic);
+        if (topic.length > 0) {
+            // console.log("On submit " + topic);
+            // Make sure not to create dup topic
+           
+            var a = arrTopics.indexOf(topic.toUpperCase());
+            console.log("topic " + a);
+            if (a < 0) {
+                arrTopics.push(topic.toUpperCase());
+                createTopicButtons();
+            }
+        }
 
     });
 
-    function createTopicButtons(){
+    function createTopicButtons() {
+        // console.log("create topic button " + arrTopics[0]);
+        //remove buttons so we don't have repeat buttons
+        $("#mytopics").empty();
+
         // $(".topic-buttons").remove();
         for (var i = 0; i < arrTopics.length; i++) {
             // $( "p" ).addClass( "myClass yourClass" );
             // $(this).attr("id", "link" + n);
             // var dogImage = $("<img>");
-            var btnTopic = $("<button></button>");
+            var btnTopic = $("<button>");
             btnTopic.attr("id", arrTopics[i]);
+            console.log("createTopicButtons button topic ID " + arrTopics[i]);
             btnTopic.attr("class", "mybuttons btn btn-outline-success topic-buttons");
             // btnTopic.attr("input", arrTopics[i]);
             btnTopic.text(arrTopics[i]);
@@ -106,5 +95,14 @@ $(document).ready(function () {
             $("#mytopics").append(btnTopic);
         }
     }
+
+
+    $(document).on("click", ".topic-buttons", function () {
+        // console.log("Clicked!" + $(this).text());
+        getAPICall($(this).text());
+    });
+    
+
 });
+
 
